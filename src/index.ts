@@ -71,13 +71,19 @@ app.get("/api/v1/content", userMiddleware, async (req, res) => {
   })
 });
 
-app.delete("/api/v1/content", async (req, res) => {
+app.delete("/api/v1/content", userMiddleware, async (req, res) => {
   const contentId = req.body.contentId
-  await ContentModel.deleteMany({
-    contentId,
+  if (!contentId) {
+    return res.status(400).json({ message: "contentId is required" })
+  }
+  const result = await ContentModel.deleteOne({
+    _id: contentId,
     // @ts-ignore
     userId: req.userId
   })
+  if (result.deletedCount === 0) {
+    return res.status(404).json({ message: "Content not found" })
+  }
   res.json({
     message: "deleted"
   })
