@@ -1,18 +1,21 @@
-# Use an official Node.js runtime as a parent image
-FROM node:latest
+FROM node:18
 
-# Set the working directory in the container
 WORKDIR /app
 
-# Copy package.json and install dependencies
+# Step 1: package files copy
 COPY package*.json ./
+
+# Step 2: install dependencies
 RUN npm install
 
-# Copy the rest of the app
+# Step 3: code copy
 COPY . .
 
-# Expose the port your app runs on
+# Step 4: build the app (IMPORTANT ORDER)
+RUN npm run build
+
+# Step 5: expose port
 EXPOSE 3000
 
-# Start the app
-CMD ["npm", "start"]
+# Step 6: start app
+CMD ["node", "dist/index.js"]
