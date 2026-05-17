@@ -9,7 +9,7 @@ const app = express();
 
 app.use(express.json());
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: process.env.CLIENT_URL|| "http://localhost:5173",
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 const JWT_SECRET = process.env.JWT_SECRET;
